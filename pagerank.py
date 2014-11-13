@@ -24,11 +24,13 @@ def page_rank(noIterations):
 
 
 def initialise_pr():
+    global incoming
+    global outgoing
     numNodes = len(incoming.keys())
     initialPR = 1.0 / numNodes
     initialDict = {}
-    for node in set(incoming.keys()+outgoing.keys()):
-        initialDict[node]=initialPR
+    for node in incoming.keys():
+        initialDict[node] = initialPR
     return initialDict
 
 
@@ -62,7 +64,7 @@ def main():
     global outgoing
     with open(inputfile) as infile:
         incoming, outgoing = creategraph.create_graph(infile)
-        ranks = page_rank(10)
+        ranks = page_rank()
         print ranks['john.lavorato@enron.com']
         print ranks['jeff.dasovich@enron.com']
         creategraph.find_top(ranks)

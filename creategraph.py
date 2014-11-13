@@ -7,27 +7,30 @@ def create_graph(infile):
     outgoing = {}
     for line in infile:
         id, sender, recipient = parse(line)
-        if sender in outgoing:
-            outgoing[sender].append(recipient)
-        else:
-            outgoing[sender] = []
-            outgoing[sender].append(recipient)
-        if recipient not in outgoing:
-            outgoing[recipient] = []
-        if recipient in incoming:
-            incoming[recipient].append(sender)
-        else:
-            incoming[recipient] = []
-            incoming[recipient].append(sender)
-        if sender not in incoming:
-            incoming[sender] = []
-    assert incoming.keys()==outgoing.keys()
+        if sender != recipient:
+            if sender in outgoing:
+                outgoing[sender].append(recipient)
+            else:
+                outgoing[sender] = []
+                outgoing[sender].append(recipient)
+            if recipient not in outgoing:
+                outgoing[recipient] = []
+            if recipient in incoming:
+                incoming[recipient].append(sender)
+            else:
+                incoming[recipient] = []
+                incoming[recipient].append(sender)
+            if sender not in incoming:
+                incoming[sender] = []
+    assert incoming.keys() == outgoing.keys()
     return incoming, outgoing
 
 
 def parse(line):
     line = line.strip()
     tokens = line.split()
+    if len(tokens) > 3:
+        print tokens
     id = tokens[0]
     sender = tokens[1]
     recipient = tokens[2]
