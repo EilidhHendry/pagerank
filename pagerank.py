@@ -1,20 +1,11 @@
 __author__ = 'eilidhhendry'
 
-import collections
+import creategraph
 
 inputfile = "/Users/eilidhhendry/PycharmProjects/tts4/graph.txt"
 
 incoming = {}
 outgoing = {}
-
-
-def parse(line):
-    line = line.strip()
-    tokens = line.split()
-    id = tokens[0]
-    sender = tokens[1]
-    recipient = tokens[2]
-    return id, sender, recipient
 
 
 def page_rank(noIterations):
@@ -66,45 +57,15 @@ def sink_nodes():
     return sinks
 
 
-def create_graph(infile):
-    for line in infile:
-        id, sender, recipient = parse(line)
-        if sender in outgoing:
-            outgoing[sender].append(recipient)
-        else:
-            outgoing[sender] = []
-            outgoing[sender].append(recipient)
-        if recipient not in outgoing:
-            outgoing[recipient] = []
-        if recipient in incoming:
-            incoming[recipient].append(sender)
-        else:
-            incoming[recipient] = []
-            incoming[recipient].append(sender)
-        if sender not in incoming:
-            incoming[sender] = []
-
-
-def find_top(ranks):
-    output = open('pr.txt', 'w')
-    score_rank = {}
-    for email, score in ranks.iteritems():
-        score_rank[score] = email
-    sorted_rank = collections.OrderedDict(sorted(score_rank.items()))
-    count = 0
-    for score, email in sorted_rank.iteritems():
-        if count == 100: break
-        print >>output, score, email
-        count += 1
-
-
 def main():
+    global incoming
+    global outgoing
     with open(inputfile) as infile:
-        create_graph(infile)
+        incoming, outgoing = creategraph.create_graph(infile)
         ranks = page_rank(10)
         print ranks['john.lavorato@enron.com']
         print ranks['jeff.dasovich@enron.com']
-        find_top(ranks)
+        creategraph.find_top(ranks)
 
 
 if __name__ == '__main__':
