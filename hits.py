@@ -18,7 +18,7 @@ def hits(numIterations):
         print 'running iteration ', iteration
         if iteration == 1:
             current_hub = initialise_hits()
-            current_auth = initialise_hits()
+            current_auth = current_hub.copy()
             print 'hub: ', current_hub['jeff.dasovich@enron.com']
             print 'auth: ', current_auth['jeff.dasovich@enron.com']
         current_hub, current_auth = update_hub(current_hub, current_auth)

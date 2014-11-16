@@ -64,7 +64,7 @@ def main():
     global outgoing
     with open(inputfile) as infile:
         incoming, outgoing = creategraph.create_graph(infile)
-        ranks = page_rank()
+        ranks = page_rank(10)
         print ranks['john.lavorato@enron.com']
         print ranks['jeff.dasovich@enron.com']
         creategraph.find_top(ranks)
