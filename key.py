@@ -1,6 +1,7 @@
 __author__ = 'eilidhhendry'
 
 import creategraph
+import pydot
 
 subjectfile = '/Users/eilidhhendry/PycharmProjects/tts4/subject.txt'
 graph = '/Users/eilidhhendry/PycharmProjects/tts4/graph.txt'
@@ -52,6 +53,23 @@ def create_id_graph(infile, key_people):
     return incoming, outgoing
 
 
+def create_graph(incoming, outgoing):
+    graph = pydot.Dot(graph_type='digraph')
+    for email in incoming.keys():
+        node = pydot.Node(email)
+        graph.add_node(node)
+    for email, list in incoming.items():
+        node_a = pydot.Node(email)
+        for sender in list:
+            node_b = pydot.Node(sender)
+            graph.add_edge(pydot.Edge(node_b, node_a))
+    for email, list in outgoing.items():
+        node_a = pydot.Node(email)
+        for recipient in list:
+            node_b = pydot.Node(recipient)
+            graph.add_edge(pydot.Edge(node_a, node_b))
+    graph.write_png('example.png')
+
 def main():
     # get the top 5 from the auth file
     with open(auth) as authfile:
@@ -70,17 +88,26 @@ def main():
         incoming, outgoing = create_id_graph(graphfile, key_people)
     print 'created graphs'
 
-    # find the subject lines of the key people
-    subjects = {}
-    with open(subjectfile) as infile:
-        for line in infile:
-            msgid, subject = read_subjects(line)
-            if msgid in incoming.values() or msgid in outgoing.values():
-                subjects[msgid] = subject
+    create_graph(incoming, outgoing)
+    #values = [x for x in (incoming.values()+outgoing.values()) if x]
+    #ids = []
+    #for list in values:
+    #    for email, msgid in list:
+    #        ids.append(msgid)
+    #print ids[0:5]
 
-    print incoming.items()
-    print outgoing.items()
-    print subjects.items()
+
+    # find the subject lines of the key people
+    #subjects = {}
+    #with open(subjectfile) as infile:
+    #    for line in infile:
+    #        msgid, subject = read_subjects(line)
+    #        if msgid in ids:
+    #            subjects[msgid] = subject
+
+    #print incoming.items()[0:5]
+    #print outgoing.items()[0:5]
+    #print subjects.items()[0:5]
 
 if __name__ == '__main__':
     main()
