@@ -64,10 +64,10 @@ def main():
     global outgoing
     with open(inputfile) as infile:
         incoming, outgoing = creategraph.create_graph(infile)
-        ranks = page_rank(10)
+        ranks = page_rank(13)
         print ranks['john.lavorato@enron.com']
         print ranks['jeff.dasovich@enron.com']
-        creategraph.find_top(ranks)
+        creategraph.find_top(ranks, 'pr.txt')
 
 
 if __name__ == '__main__':

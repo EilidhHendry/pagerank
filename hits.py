@@ -70,9 +70,11 @@ def main():
     global outgoing
     with open(filename) as infile:
         incoming, outgoing = creategraph.create_graph(infile)
-        hubs, auths = hits(10)
+        hubs, auths = hits(20)
         print 'hub: ', hubs['jeff.dasovich@enron.com']
         print 'auth: ', auths['jeff.dasovich@enron.com']
+        creategraph.find_top(hubs, 'hubs.txt')
+        creategraph.find_top(auths, 'auth.txt')
 
 if __name__=='__main__':
     main()
