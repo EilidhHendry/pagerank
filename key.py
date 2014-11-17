@@ -52,6 +52,28 @@ def create_id_graph(infile, key_people):
     assert incoming.keys() == outgoing.keys()
     return incoming, outgoing
 
+def create_graph(infile):
+    incoming = {}
+    outgoing = {}
+    for line in infile:
+        msgid, sender, recipient = creategraph.parse(line)
+        if sender != recipient:
+            if sender in outgoing:
+                outgoing[sender].append(recipient)
+            else:
+                outgoing[sender] = []
+                outgoing[sender].append(recipient)
+            if recipient not in outgoing:
+                outgoing[recipient] = []
+            if recipient in incoming:
+                incoming[recipient].append(sender)
+            else:
+                incoming[recipient] = []
+                incoming[recipient].append(sender)
+            if sender not in incoming:
+                incoming[sender] = []
+    assert incoming.keys() == outgoing.keys()
+    return incoming, outgoing
 
 def create_graph(incoming, outgoing):
     graph = pydot.Dot(graph_type='digraph')
@@ -85,7 +107,7 @@ def main():
 
     # create the graph including msg ids of key people
     with open(graph) as graphfile:
-        incoming, outgoing = create_id_graph(graphfile, key_people)
+        incoming, outgoing = create_graph(graphfile)
     print 'created graphs'
 
     create_graph(incoming, outgoing)
